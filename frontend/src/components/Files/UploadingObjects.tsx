@@ -49,7 +49,11 @@ const UploadingObject = ({
   );
 
   const progress = useMemo(() => {
-    return (uploadStatus.uploadedNodes / uploadStatus.totalNodes) * 100;
+    return (
+      (uploadStatus.uploadedNodes /
+        (uploadStatus.nodesToBeUploaded + uploadStatus.uploadedNodes)) *
+      100
+    );
   }, [uploadStatus, metadata]);
 
   useInterval(() => {
@@ -61,12 +65,12 @@ const UploadingObject = ({
   }, 5_000);
 
   useEffect(() => {
-    if (uploadStatus.uploadedNodes === uploadStatus.totalNodes) {
+    if (uploadStatus.nodesToBeUploaded === 0) {
       setUploadingObjects((prev) =>
         prev.filter((cid) => cid !== metadata.dataCid)
       );
     }
-  }, [uploadStatus.uploadedNodes, uploadStatus.totalNodes]);
+  }, [uploadStatus.nodesToBeUploaded]);
 
   const handleClose = useCallback(() => {
     setIsClosed(true);
@@ -75,9 +79,6 @@ const UploadingObject = ({
   if (isClosed) {
     return null;
   }
-
-  const hasBeenUploaded =
-    uploadStatus.uploadedNodes === uploadStatus.totalNodes;
 
   return (
     <div className="mx-auto p-4">
@@ -93,7 +94,7 @@ const UploadingObject = ({
           </div>
         </div>
         <div className="mb-4">
-          {!hasBeenUploaded ? (
+          {progress < 100 ? (
             <p className="text-sm font-semibold mb-1">
               Uploading ({progress}%)
             </p>
@@ -103,7 +104,7 @@ const UploadingObject = ({
           <div className="bg-gray-200 rounded-full h-2">
             <div
               className={`${
-                hasBeenUploaded ? "bg-green-500" : "bg-blue-500"
+                progress === 100 ? "bg-green-500" : "bg-blue-500"
               } rounded-full h-2 transition-all duration-300 ease-in-out`}
               style={{ width: `${progress}%` }}
             ></div>
