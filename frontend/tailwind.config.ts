@@ -16,7 +16,6 @@ const config: Config = {
         "lighter-accent": "#90C2E7",
         "light-danger": "#ffcdd2",
         "gray-button": "#9EA49F",
-        "light-gray": "#4E4F54",
       },
     },
   },

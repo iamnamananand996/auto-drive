@@ -22,20 +22,3 @@ export enum OwnerRole {
   ADMIN = "admin",
   VIEWER = "viewer",
 }
-
-export type ObjectSummary = {
-  headCid: string;
-  name?: string;
-  size: number;
-  owners: Owner[];
-  uploadStatus: UploadStatus;
-} & (
-  | {
-      type: "file";
-      mimeType?: string;
-    }
-  | {
-      type: "folder";
-      children: (OffchainMetadata & { type: "folder" })["children"];
-    }
-);

@@ -1,10 +1,10 @@
 "use client";
 
 import {
-  ObjectSummary,
   OwnerRole,
   UploadedObjectMetadata,
 } from "@/models/UploadedObjectMetadata";
+import { ApiService } from "@/services/api";
 import {
   Checkbox,
   Popover,
@@ -26,8 +26,10 @@ import { Metadata } from "../../Files/Metadata";
 import { ObjectShareModal } from "../../Files/ObjectShareModal";
 import bytes from "bytes";
 import { ObjectDeleteModal } from "../../Files/ObjectDeleteModal";
-import { getTypeFromMetadata } from "../../../utils/file";
+import { getTypeFromMetadata, handleFileDownload } from "../../../utils/file";
+import { OffchainMetadata } from "@autonomys/auto-drive";
 import { ObjectDownloadModal } from "../../Files/ObjectDownloadModal";
+import toast from "react-hot-toast";
 import { shortenString } from "../../../utils/misc";
 import { useUserStore } from "../../../states/user";
 import { Table } from "../Table";
@@ -35,23 +37,9 @@ import { TableHead, TableHeadCell, TableHeadRow } from "../Table/TableHead";
 import { TableBody, TableBodyCell, TableBodyRow } from "../Table/TableBody";
 import { DisplayerIcon } from "../Triangle";
 import { Button } from "../Button";
-import { TableFooter } from "../Table/TableFooter";
-import { TablePaginator } from "../TablePaginator";
 
-export const FileTable: FC<{
-  files: ObjectSummary[];
-  pageSize: number;
-  setPageSize: (pageSize: number) => void;
-  currentPage: number;
-  setCurrentPage: (currentPage: number) => void;
-  totalItems: number;
-}> = ({
+export const FileTable: FC<{ files: UploadedObjectMetadata[] }> = ({
   files,
-  pageSize,
-  setPageSize,
-  currentPage,
-  setCurrentPage,
-  totalItems,
 }) => {
   const user = useUserStore(({ user }) => user);
   const [downloadingCID, setDownloadingCID] = useState<string | null>(null);
@@ -158,8 +146,8 @@ export const FileTable: FC<{
   );
 
   const renderRow = useCallback(
-    (file: ObjectSummary) => {
-      const isExpanded = expandedRows.has(file.headCid);
+    (file: UploadedObjectMetadata) => {
+      const isExpanded = expandedRows.has(file.metadata.dataCid);
       const owner = file.owners.find(
         (o) => o.role === OwnerRole.ADMIN
       )?.publicId;
@@ -171,33 +159,38 @@ export const FileTable: FC<{
       );
 
       return (
-        <Fragment key={file.headCid}>
+        <Fragment key={file.metadata.dataCid}>
           <TableBodyRow
-            className={file.type === "folder" ? "hover:cursor-pointer" : ""}
+            className={
+              file.metadata.type === "folder" ? "hover:cursor-pointer" : ""
+            }
             onClick={() =>
-              file.type === "folder" && navigateToFile(file.headCid)
+              file.metadata.type === "folder" &&
+              navigateToFile(file.metadata.dataCid)
             }
           >
             <TableBodyCell className="whitespace-nowrap text-sm text-gray-500">
               <div className="flex items-center">
                 <input
                   type="checkbox"
-                  checked={selectedFiles.some((f) => f.cid === file.headCid)}
+                  checked={selectedFiles.some(
+                    (f) => f.cid === file.metadata.dataCid
+                  )}
                   onChange={(e) =>
                     toggleSelectFile(e, {
-                      totalSize: file.size,
-                      type: file.type,
-                      cid: file.headCid,
-                      name: file.name,
+                      type: file.metadata.type,
+                      cid: file.metadata.dataCid,
+                      name: file.metadata.name,
+                      totalSize: file.metadata.totalSize,
                     })
                   }
                   className="mr-3 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
-                {file.type === "folder" && file.children && (
+                {file.metadata.type === "folder" && file.metadata.children && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      toggleRow(file.headCid);
+                      toggleRow(file.metadata.dataCid);
                     }}
                   >
                     {isExpanded ? (
@@ -207,10 +200,10 @@ export const FileTable: FC<{
                     )}
                   </button>
                 )}
-                <span>{renderFileIcon(file.type)}</span>
+                <span>{renderFileIcon(file.metadata.type)}</span>
                 <span
                   className={`relative ml-2 text-sm font-medium text-gray-900 ${
-                    file.type === "folder"
+                    file.metadata.type === "folder"
                       ? "hover:underline hover:cursor-pointer"
                       : ""
                   }`}
@@ -222,9 +215,9 @@ export const FileTable: FC<{
                   >
                     <PopoverButton ref={popoverButtonRef} as="span">
                       <span className="hover:cursor-pointer text-accent font-semibold">
-                        {file.name
-                          ? shortenString(file.name, 30)
-                          : `No name (${file.headCid.slice(0, 12)})`}
+                        {file.metadata.name
+                          ? shortenString(file.metadata.name, 30)
+                          : `No name (${file.metadata.dataCid.slice(0, 12)})`}
                       </span>
                     </PopoverButton>
                     <Transition
@@ -246,8 +239,8 @@ export const FileTable: FC<{
                 </span>
               </div>
             </TableBodyCell>
-            <TableBodyCell>{getTypeFromMetadata(file)}</TableBodyCell>
-            <TableBodyCell>{bytes(file.size)}</TableBodyCell>
+            <TableBodyCell>{getTypeFromMetadata(file.metadata)}</TableBodyCell>
+            <TableBodyCell>{bytes(file.metadata.totalSize)}</TableBodyCell>
             <TableBodyCell>
               {owner ? renderOwnerBadge(owner) : "Unknown"}
             </TableBodyCell>
@@ -261,7 +254,7 @@ export const FileTable: FC<{
                   variant="lightAccent"
                   className="mr-2 text-xs outline-none focus:ring-0"
                   disabled={file.uploadStatus.totalNodes === null}
-                  onClick={(e) => downloadFile(e, file.headCid)}
+                  onClick={(e) => downloadFile(e, file.metadata.dataCid)}
                 >
                   Download
                 </Button>
@@ -290,7 +283,7 @@ export const FileTable: FC<{
                 variant="lightAccent"
                 className="mr-2 text-xs disabled:hidden"
                 disabled={!isOwner}
-                onClick={(e) => shareFile(e, file.headCid)}
+                onClick={(e) => shareFile(e, file.metadata.dataCid)}
               >
                 Share
               </Button>
@@ -298,16 +291,16 @@ export const FileTable: FC<{
                 variant="lightDanger"
                 className="text-xs disabled:hidden"
                 disabled={!hasFileOwnership}
-                onClick={(e) => onDeleteFile(e, file.headCid)}
+                onClick={(e) => onDeleteFile(e, file.metadata.dataCid)}
               >
                 Delete
               </Button>
             </TableBodyCell>
           </TableBodyRow>
           {isExpanded &&
-            file.type === "folder" &&
-            file.children &&
-            file.children.map((child) => (
+            file.metadata.type === "folder" &&
+            file.metadata.children &&
+            file.metadata.children.map((child) => (
               <TableBodyRow key={child.cid}>
                 <TableBodyCell className="w-[50%]">
                   <div className="flex items-center">
@@ -320,7 +313,7 @@ export const FileTable: FC<{
                     -
                     <span
                       className={`relative ml-2 text-sm font-semibold text-accent ${
-                        file.type === "folder"
+                        file.metadata.type === "folder"
                           ? "hover:underline hover:cursor-pointer"
                           : ""
                       }`}
@@ -391,10 +384,10 @@ export const FileTable: FC<{
                     ? setSelectedFiles([])
                     : setSelectedFiles(
                         files.map((f) => ({
-                          type: f.type,
-                          cid: f.headCid,
-                          name: f.name,
-                          totalSize: f.size,
+                          type: f.metadata.type,
+                          cid: f.metadata.dataCid,
+                          name: f.metadata.name,
+                          totalSize: f.metadata.totalSize,
                         }))
                       )
                 }
@@ -432,19 +425,6 @@ export const FileTable: FC<{
               </TableHeadRow>
             </TableHead>
             <TableBody>{files.map((file) => renderRow(file))}</TableBody>
-            <TableFooter>
-              <tr className="w-full">
-                <td colSpan={5}>
-                  <TablePaginator
-                    pageSize={pageSize}
-                    setPageSize={setPageSize}
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                    totalItems={totalItems}
-                  />
-                </td>
-              </tr>
-            </TableFooter>
           </Table>
         </div>
       </div>

@@ -1,24 +1,28 @@
-import { ObjectSummary } from "../../models/UploadedObjectMetadata";
+import { UploadedObjectMetadata } from "../../models/UploadedObjectMetadata";
 import bytes from "bytes";
 import { getTypeFromMetadata } from "../../utils/file";
 import { InternalLink } from "../common/InternalLink";
 
-export const Metadata = ({ object }: { object: ObjectSummary }) => {
+export const Metadata = ({ object }: { object: UploadedObjectMetadata }) => {
   return (
     <div className="bg-white p-4 rounded-lg border-[#202124] border border-opacity-20 text-xs">
       <div className="flex flex-col mb-4">
         <h4 className="font-medium text-sm text-black text-wrap">
-          {object.name}
+          {object.metadata.name}
         </h4>
-        <p className="text-gray-500">Size: {bytes(object.size)}</p>
+        <p className="text-gray-500">
+          Size: {bytes(object.metadata.totalSize)}
+        </p>
         <p>
-          CID: <span className="text-blue-500">{object.headCid}</span>
+          CID: <span className="text-blue-500">{object.metadata.dataCid}</span>
         </p>
       </div>
       <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-black font-light">
         <div className="flex">
           <span>Type:</span>
-          <span className="ml-[4px]">{getTypeFromMetadata(object)}</span>
+          <span className="ml-[4px]">
+            {getTypeFromMetadata(object.metadata)}
+          </span>
         </div>
         <div className="flex">
           <span>{"Owner: "}</span>
@@ -50,7 +54,7 @@ export const Metadata = ({ object }: { object: ObjectSummary }) => {
         </div>
       </div>
       <div className="flex justify-end">
-        <InternalLink href={`/drive/metadata/${object.headCid}`}>
+        <InternalLink href={`/drive/metadata/${object.metadata.dataCid}`}>
           <span className="text-primary font-semibold hover:cursor-pointer mt-4">
             See more
           </span>
