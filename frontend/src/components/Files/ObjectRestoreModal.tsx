@@ -6,7 +6,7 @@ import {
   TransitionChild,
 } from '@headlessui/react';
 import { Fragment, useCallback } from 'react';
-import { ApiService } from '../../services/api';
+import { createApiService } from '../../services/api';
 import toast from 'react-hot-toast';
 import { Button } from '../common/Button';
 
@@ -22,7 +22,7 @@ export const ObjectRestoreModal = ({
       return;
     }
 
-    ApiService.restoreObject(cid).then(() => {
+    createApiService.restoreObject(cid).then(() => {
       toast.success('Object restored successfully');
       closeModal();
       window.location.reload();

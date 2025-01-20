@@ -1,4 +1,4 @@
-import { ApiService } from '../services/api';
+import { createApiService } from '../services/api';
 import { User, UserInfo } from '../models/User.js';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
@@ -21,7 +21,7 @@ export const useUserStore = create<UserStore>()(
       setUser: (userInfo: UserInfo) => set(userInfo),
       clearUser: () => set({ user: null, subscription: null }),
       updateUser: () => {
-        ApiService.getMe().then((userInfo) => set(userInfo));
+        createApiService.getMe().then((userInfo) => set(userInfo));
       },
     }),
     {

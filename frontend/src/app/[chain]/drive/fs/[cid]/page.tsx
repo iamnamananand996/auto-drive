@@ -1,17 +1,25 @@
-import { FileCard } from '../../../../components/common/FileCard';
-import { gqlClient } from '../../../../services/gql';
+import { FileCard } from '../../../../../components/common/FileCard';
 import {
   GetMetadataByHeadCidDocument,
   GetMetadataByHeadCidQuery,
-} from '../../../../../gql/graphql';
-import { mapObjectInformationFromQueryResult } from '../../../../services/gql/utils';
+} from '../../../../../../gql/graphql';
+import { mapObjectInformationFromQueryResult } from '../../../../../services/gql/utils';
+import { createGqlClient } from '../../../../../services/gql';
+import { getNetwork } from '../../../../../constants/networks';
 
 export const dynamic = 'force-dynamic';
 
-export default async function Page({ params }: { params: { cid: string } }) {
+export default async function Page({
+  params: { chain, cid },
+}: {
+  params: { chain: string; cid: string };
+}) {
+  const { gqlUrl } = getNetwork(chain);
+  const gqlClient = createGqlClient(gqlUrl);
+
   const { data } = await gqlClient.query<GetMetadataByHeadCidQuery>({
     query: GetMetadataByHeadCidDocument,
-    variables: { headCid: params.cid },
+    variables: { headCid: cid },
   });
 
   const metadata = mapObjectInformationFromQueryResult(data);

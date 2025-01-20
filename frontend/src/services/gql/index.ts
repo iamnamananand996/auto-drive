@@ -13,12 +13,14 @@ const authLink = setContext(async (_, { headers }) => {
   };
 });
 
-const httpLink = createHttpLink({
-  uri: process.env.NEXT_PUBLIC_GQL_URL,
-});
+export const createGqlClient = (gqlUrl: string) => {
+  const httpLink = createHttpLink({
+    uri: gqlUrl,
+  });
 
-export const gqlClient = new ApolloClient({
-  uri: process.env.NEXT_PUBLIC_GQL_URL,
-  cache: new InMemoryCache(),
-  link: authLink.concat(httpLink),
-});
+  return new ApolloClient({
+    uri: gqlUrl,
+    cache: new InMemoryCache(),
+    link: authLink.concat(httpLink),
+  });
+};

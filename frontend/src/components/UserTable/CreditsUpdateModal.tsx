@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@headlessui/react';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
-import { ApiService } from '../../services/api';
+import { createApiService } from '../../services/api';
 import toast from 'react-hot-toast';
 
 export const CreditsUpdateModal = ({
@@ -36,7 +36,7 @@ export const CreditsUpdateModal = ({
     if (userHandle && downloadCredits && uploadCredits) {
       const downloadBytes = Number(downloadCredits) * downloadCreditsUnit;
       const uploadBytes = Number(uploadCredits) * uploadCreditsUnit;
-      await ApiService.updateSubscription(
+      await createApiService.updateSubscription(
         userHandle,
         'monthly',
         uploadBytes,

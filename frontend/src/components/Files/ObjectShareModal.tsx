@@ -8,7 +8,7 @@ import {
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { UploadedObjectMetadata } from '../../models/UploadedObjectMetadata';
-import { ApiService } from '../../services/api';
+import { createApiService } from '../../services/api';
 import { Button } from '../common/Button';
 import { Link } from 'lucide-react';
 import { isValidUUID } from '../../utils/misc';
@@ -48,7 +48,8 @@ export const ObjectShareModal = ({
       return;
     }
 
-    await ApiService.shareObject(metadata?.metadata.dataCid, publicId)
+    await createApiService
+      .shareObject(metadata?.metadata.dataCid, publicId)
       .then(async () => {
         toast.success('Object shared successfully');
         await new Promise((resolve) => setTimeout(resolve, 100));

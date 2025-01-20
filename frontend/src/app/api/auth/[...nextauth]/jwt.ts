@@ -37,25 +37,25 @@ const getRefreshTokenFromResponse = (response: Response): string => {
   return token;
 };
 
-export const generateAccessToken = async ({
-  provider,
-  userId,
-  oauthAccessToken,
-}: {
-  provider: string;
-  userId: string;
-  oauthAccessToken: string;
-}): Promise<JWT> => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/users/@me/accessToken`,
-    {
-      method: 'POST',
-      headers: {
-        'x-auth-provider': provider,
-        Authorization: `Bearer ${oauthAccessToken}`,
-      },
+export const generateAccessToken = async (
+  baseUrl: string,
+  {
+    provider,
+    userId,
+    oauthAccessToken,
+  }: {
+    provider: string;
+    userId: string;
+    oauthAccessToken: string;
+  },
+): Promise<JWT> => {
+  const response = await fetch(`${baseUrl}/users/@me/accessToken`, {
+    method: 'POST',
+    headers: {
+      'x-auth-provider': provider,
+      Authorization: `Bearer ${oauthAccessToken}`,
     },
-  );
+  });
 
   const newTokens = await response.json();
   const accessToken = newTokens.accessToken;
@@ -76,24 +76,24 @@ export const generateAccessToken = async ({
   return nextJWT;
 };
 
-export const refreshAccessToken = async ({
-  underlyingUserId,
-  underlyingProvider,
-  refreshToken,
-}: {
-  underlyingUserId: string;
-  underlyingProvider: string;
-  refreshToken: string;
-}): Promise<JWT> => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/users/@me/refreshToken`,
-    {
-      method: 'POST',
-      headers: {
-        Cookie: `refreshToken=${refreshToken};`,
-      },
+export const refreshAccessToken = async (
+  baseUrl: string,
+  {
+    underlyingUserId,
+    underlyingProvider,
+    refreshToken,
+  }: {
+    underlyingUserId: string;
+    underlyingProvider: string;
+    refreshToken: string;
+  },
+): Promise<JWT> => {
+  const response = await fetch(`${baseUrl}/users/@me/refreshToken`, {
+    method: 'POST',
+    headers: {
+      Cookie: `refreshToken=${refreshToken};`,
     },
-  );
+  });
 
   const newTokens = await response.json();
   const accessToken = newTokens.accessToken;
@@ -116,23 +116,19 @@ export const refreshAccessToken = async ({
   return nextJWT;
 };
 
-export const invalidateRefreshToken = async ({
-  refreshToken,
-}: {
-  refreshToken: string;
-}): Promise<void> => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/users/@me/invalidateToken`,
-    {
-      method: 'DELETE',
-      body: JSON.stringify({
-        token: refreshToken,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+export const invalidateRefreshToken = async (
+  baseUrl: string,
+  { refreshToken }: { refreshToken: string },
+): Promise<void> => {
+  const response = await fetch(`${baseUrl}/users/@me/invalidateToken`, {
+    method: 'DELETE',
+    body: JSON.stringify({
+      token: refreshToken,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
+  });
 
   if (!response.ok) {
     throw new Error(

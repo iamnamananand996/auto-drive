@@ -6,9 +6,9 @@ import {
   TransitionChild,
 } from '@headlessui/react';
 import { Fragment, useCallback } from 'react';
-import { ApiService } from '../../services/api';
 import toast from 'react-hot-toast';
 import { Button } from '../common/Button';
+import { useChain } from '../../providers/ChainProvider';
 
 export const DeleteApiKeyModal = ({
   apiKeyId,
@@ -18,13 +18,15 @@ export const DeleteApiKeyModal = ({
   closeModal: () => void;
 }) => {
   const isOpen = apiKeyId !== null;
+  const { api } = useChain();
 
   const deleteApiKey = useCallback(() => {
     if (!apiKeyId) {
       return;
     }
 
-    ApiService.deleteApiKey(apiKeyId)
+    api
+      .deleteApiKey(apiKeyId)
       .then(() => {
         toast.success('API key deleted successfully');
         closeModal();
@@ -33,7 +35,7 @@ export const DeleteApiKeyModal = ({
       .catch(() => {
         toast.error('Failed to delete API key');
       });
-  }, [apiKeyId, closeModal]);
+  }, [api, apiKeyId, closeModal]);
 
   return (
     <Transition appear show={isOpen} as={Fragment}>

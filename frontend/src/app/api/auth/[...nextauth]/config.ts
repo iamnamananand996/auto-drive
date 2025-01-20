@@ -6,6 +6,7 @@ import {
   invalidateRefreshToken,
   refreshAccessToken,
 } from './jwt';
+import { defaultNetwork } from '../../../../constants/networks';
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -25,7 +26,7 @@ export const authOptions: AuthOptions = {
       const isTokenSetupAndRefreshable =
         token.accessToken && token.authProvider && token.refreshToken;
       if (isTokenSetupAndRefreshable) {
-        const accessToken = await refreshAccessToken({
+        const accessToken = await refreshAccessToken(defaultNetwork.apiUrl, {
           underlyingUserId: token.underlyingUserId!,
           underlyingProvider: token.underlyingProvider!,
           refreshToken: token.refreshToken!,
@@ -35,7 +36,7 @@ export const authOptions: AuthOptions = {
 
       const isOAuthSuccessfullyLoggedIn = account && account.access_token;
       if (isOAuthSuccessfullyLoggedIn) {
-        return generateAccessToken({
+        return generateAccessToken(defaultNetwork.apiUrl, {
           provider: account.provider,
           userId: account.providerAccountId,
           oauthAccessToken: account.access_token!,
@@ -59,7 +60,9 @@ export const authOptions: AuthOptions = {
   events: {
     async signOut({ token }) {
       if (token.refreshToken) {
-        await invalidateRefreshToken({ refreshToken: token.refreshToken });
+        await invalidateRefreshToken(defaultNetwork.apiUrl, {
+          refreshToken: token.refreshToken,
+        });
       }
     },
   },

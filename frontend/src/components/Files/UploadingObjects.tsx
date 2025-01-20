@@ -1,7 +1,7 @@
 'use client';
 
 import bytes from 'bytes';
-import { ApiService } from '@/services/api';
+import { createApiService } from '@/services/api';
 import { FileIcon, FolderIcon, X } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
@@ -23,7 +23,7 @@ export const UploadingObjects = () => {
     // TODO: reimplement this without using local storage
     Promise.all(
       uploadingObjects.map((cid) =>
-        ApiService.fetchUploadedObjectMetadata(cid),
+        createApiService.fetchUploadedObjectMetadata(cid),
       ),
     ).then((metadata) => {
       setUploadingObjectsMetadata(metadata);

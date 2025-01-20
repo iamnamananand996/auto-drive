@@ -17,9 +17,8 @@ import { RemainingCreditTracker } from '../../components/RemainingCreditTracker'
 import { useMemo } from 'react';
 import Image from 'next/image';
 import { useUserStore } from '../../states/user';
-import { ApolloProvider } from '@apollo/client';
-import { gqlClient } from '../../services/gql';
 import { SessionProvider } from 'next-auth/react';
+import { ChainProvider } from '../../providers/ChainProvider';
 
 export default function AppLayout({
   children,
@@ -121,7 +120,7 @@ export default function AppLayout({
             </aside>
             <main className='flex-1 overflow-auto p-6'>
               <SessionProvider>
-                <ApolloProvider client={gqlClient}>{children}</ApolloProvider>
+                <ChainProvider>{children}</ChainProvider>
               </SessionProvider>
             </main>
           </UserEnsurer>

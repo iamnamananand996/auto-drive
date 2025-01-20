@@ -3,7 +3,7 @@ import { UserInfo } from '../models/User';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 export const AuthService = {
-  checkAuth: async (provider?: string, token?: string): Promise<UserInfo> => {
+checkAuth: async (provider?: string, token?: string): Promise<UserInfo> => {
     if (!provider || !token) {
       throw new Error('Provider or token is not defined');
     }

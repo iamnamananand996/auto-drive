@@ -12,7 +12,7 @@ export const Home = () => {
       <LandingHeader />
       <div className='mt-5 flex min-h-[50vh] w-[90%] flex-col items-center justify-center gap-4 overflow-hidden rounded-3xl rounded-xl bg-white py-8 md:w-[60%] md:flex-row md:gap-0 md:py-0'>
         <div className='flex h-full w-full flex-col items-center justify-center gap-4 rounded-3xl bg-white px-4'>
-          <h1 className='margin-0 bg-gradient-to-b from-backgroundDarkest to-backgroundDark bg-clip-text text-4xl font-semibold text-transparent text-center'>
+          <h1 className='margin-0 bg-gradient-to-b from-backgroundDarkest to-backgroundDark bg-clip-text text-center text-4xl font-semibold text-transparent'>
             Auto Drive
           </h1>
           <p className='text-gray max-w-[75%] text-center text-lg font-light'>
@@ -31,7 +31,7 @@ export const Home = () => {
           />
         </div>
       </div>
-      <h2 className="text-center text-4xl font-bold text-backgroundDarker my-8">
+      <h2 className='my-8 text-center text-4xl font-bold text-backgroundDarker'>
         Upload Once, Access Forever.
       </h2>
       <div className='mt-5 flex min-h-[50vh] w-[90%] flex-col items-center justify-center gap-4 overflow-hidden rounded-3xl rounded-xl bg-white py-8 md:w-[60%] md:flex-row md:gap-0 md:py-0'>
@@ -45,24 +45,29 @@ export const Home = () => {
           />
         </div>
         <div className='flex h-full w-full flex-col items-center justify-center gap-4 rounded-3xl bg-white px-4'>
-          <h1 className='margin-0 bg-gradient-to-b from-backgroundDarkest to-backgroundDark bg-clip-text text-4xl font-semibold text-transparent text-center'>
+          <h1 className='margin-0 bg-gradient-to-b from-backgroundDarkest to-backgroundDark bg-clip-text text-center text-4xl font-semibold text-transparent'>
             Upload Files & Folders
           </h1>
           <p className='text-gray max-w-[75%] text-center text-lg font-light'>
-            Upload files and folders to Autonomys Network decentralized permanent storage, by simply dragging and dropping them into the upload area. Or select files and folders from your computer.
+            Upload files and folders to Autonomys Network decentralized
+            permanent storage, by simply dragging and dropping them into the
+            upload area. Or select files and folders from your computer.
           </p>
         </div>
       </div>
-      <h2 className="text-center text-4xl font-bold text-backgroundDarker my-8">
+      <h2 className='my-8 text-center text-4xl font-bold text-backgroundDarker'>
         Your Drive into Permanent Decentralized Storage.
       </h2>
       <div className='mt-5 flex min-h-[50vh] w-[90%] flex-col items-center justify-center gap-4 overflow-hidden rounded-3xl rounded-xl bg-white py-8 md:w-[60%] md:flex-row md:gap-0 md:py-0'>
         <div className='flex h-full w-full flex-col items-center justify-center gap-4 rounded-3xl bg-white px-4'>
-          <h1 className='margin-0 bg-gradient-to-b from-backgroundDarkest to-backgroundDark bg-clip-text text-4xl font-semibold text-transparent text-center'>
+          <h1 className='margin-0 bg-gradient-to-b from-backgroundDarkest to-backgroundDark bg-clip-text text-center text-4xl font-semibold text-transparent'>
             Secure End-to-End Encryption (E2EE)
           </h1>
           <p className='text-gray max-w-[75%] text-center text-lg font-light leading-relaxed'>
-            Secure your data with optional end-to-end encryption on Autonomys Network. Choose between setting a global encryption key for all files, customizing keys per file, or uploading without encryption - putting you in complete control of your data security.
+            Secure your data with optional end-to-end encryption on Autonomys
+            Network. Choose between setting a global encryption key for all
+            files, customizing keys per file, or uploading without encryption -
+            putting you in complete control of your data security.
           </p>
         </div>
         <div className='flex h-full w-full grow flex-col items-center justify-center gap-4 rounded-3xl bg-white px-4'>
@@ -75,7 +80,7 @@ export const Home = () => {
           />
         </div>
       </div>
-      <h2 className="text-center text-4xl font-bold text-backgroundDarker my-8">
+      <h2 className='my-8 text-center text-4xl font-bold text-backgroundDarker'>
         Seamless Integration & Developer-Friendly
       </h2>
       <div className='mt-5 flex min-h-[50vh] w-[90%] flex-col items-center justify-center gap-4 overflow-hidden rounded-3xl rounded-xl bg-white py-8 md:w-[60%] md:flex-row md:gap-0 md:py-0'>
@@ -89,24 +94,28 @@ export const Home = () => {
           />
         </div>
         <div className='flex h-full w-full flex-col items-center justify-center gap-4 rounded-3xl bg-white px-4'>
-          <h1 className='margin-0 bg-gradient-to-b from-backgroundDarkest to-backgroundDark bg-clip-text text-4xl font-semibold text-transparent text-center'>
+          <h1 className='margin-0 bg-gradient-to-b from-backgroundDarkest to-backgroundDark bg-clip-text text-center text-4xl font-semibold text-transparent'>
             Create API Keys
           </h1>
           <p className='text-gray max-w-[75%] text-center text-lg font-light'>
-            Create API keys to access Autonomys Network decentralized permanent storage, through our API.
+            Create API keys to access Autonomys Network decentralized permanent
+            storage, through our API.
           </p>
         </div>
       </div>
-      <h2 className="text-center text-4xl font-bold text-backgroundDarker my-8">
+      <h2 className='my-8 text-center text-4xl font-bold text-backgroundDarker'>
         TypeScript & JavaScript Support with Full Type Safety
       </h2>
       <div className='mt-5 flex min-h-[50vh] w-[90%] flex-col items-center justify-center gap-4 overflow-hidden rounded-3xl rounded-xl bg-white py-8 md:w-[60%] md:flex-row md:gap-0 md:py-0'>
         <div className='flex h-full w-full flex-col items-center justify-center gap-4 rounded-3xl bg-white px-4'>
-          <h1 className='margin-0 bg-gradient-to-b from-backgroundDarkest to-backgroundDark bg-clip-text text-4xl font-semibold text-transparent text-center'>
+          <h1 className='margin-0 bg-gradient-to-b from-backgroundDarkest to-backgroundDark bg-clip-text text-center text-4xl font-semibold text-transparent'>
             @autonomys/auto-drive
           </h1>
           <p className='text-gray max-w-[75%] text-center text-lg font-light'>
-            Implement Auto-Drive&apos;s powerful permanent decentralized storage capabilities into your own applications using our official NPM package. Get started quickly with a familiar JavaScript/TypeScript interface and comprehensive documentation.
+            Implement Auto-Drive&apos;s powerful permanent decentralized storage
+            capabilities into your own applications using our official NPM
+            package. Get started quickly with a familiar JavaScript/TypeScript
+            interface and comprehensive documentation.
             <br />
             <br />
             <Link
@@ -145,7 +154,7 @@ export const Home = () => {
           </Link>
         </div>
       </div>
-      <h2 className="text-center text-4xl font-bold text-backgroundDarker my-8">
+      <h2 className='my-8 text-center text-4xl font-bold text-backgroundDarker'>
         Scalable Data Structure for Decentralized Storage
       </h2>
       <div className='mt-5 flex min-h-[50vh] w-[90%] flex-col items-center justify-center gap-4 overflow-hidden rounded-3xl rounded-xl bg-white py-8 md:w-[60%] md:flex-row md:gap-0 md:py-0'>
@@ -166,15 +175,18 @@ export const Home = () => {
           </Link>
         </div>
         <div className='flex h-full w-full flex-col items-center justify-center gap-4 rounded-3xl bg-white px-4'>
-          <h1 className='margin-0 bg-gradient-to-b from-backgroundDarkest to-backgroundDark bg-clip-text text-4xl font-semibold text-transparent text-center'>
+          <h1 className='margin-0 bg-gradient-to-b from-backgroundDarkest to-backgroundDark bg-clip-text text-center text-4xl font-semibold text-transparent'>
             Auto-DAG Data Structure
           </h1>
           <p className='text-gray max-w-[75%] text-center text-lg font-light leading-relaxed'>
-            Autonomys Network uses the Auto-DAG data structure, which store your data on chain in small chunks to fit the block size limit of Autonomys Network and to ensure the integrity and authenticity of your data.
+            Autonomys Network uses the Auto-DAG data structure, which store your
+            data on chain in small chunks to fit the block size limit of
+            Autonomys Network and to ensure the integrity and authenticity of
+            your data.
           </p>
         </div>
       </div>
-      <h2 className="text-center text-4xl font-bold text-backgroundDarker my-8">
+      <h2 className='my-8 text-center text-4xl font-bold text-backgroundDarker'>
         Join Us Today and Experience the Future of Storage!
       </h2>
       <div className='mt-5 flex min-h-[50vh] w-[90%] flex-col items-center justify-center gap-4 overflow-hidden rounded-3xl rounded-xl bg-white py-8 md:w-[60%] md:flex-row md:gap-0 md:py-0'>
@@ -188,11 +200,12 @@ export const Home = () => {
           />
         </div>
         <div className='flex h-full w-full flex-col items-center justify-center gap-4 rounded-3xl bg-white px-4'>
-          <h1 className='margin-0 bg-gradient-to-b from-backgroundDarkest to-backgroundDark bg-clip-text text-4xl font-semibold text-transparent text-center'>
+          <h1 className='margin-0 bg-gradient-to-b from-backgroundDarkest to-backgroundDark bg-clip-text text-center text-4xl font-semibold text-transparent'>
             Auto Drive
           </h1>
           <p className='text-gray max-w-[75%] text-center text-lg font-light'>
-            Sign in now to store, share, and download your files securely with Autonomys Network decentralized permanent storage.
+            Sign in now to store, share, and download your files securely with
+            Autonomys Network decentralized permanent storage.
           </p>
           <SigningInButtons />
         </div>

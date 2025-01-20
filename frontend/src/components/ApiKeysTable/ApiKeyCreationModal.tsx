@@ -8,11 +8,11 @@ import {
   DialogTitle,
 } from '@headlessui/react';
 import { Fragment, useCallback, useEffect, useState } from 'react';
-import { ApiService } from '../../services/api';
 import { ApiKey } from '../../models/ApiKey';
 import toast from 'react-hot-toast';
 import { Button } from '../common/Button';
 import { handleEnterOrSpace } from '../../utils/eventHandler';
+import { useChain } from '../../providers/ChainProvider';
 
 export const ApiKeyCreationModal = ({
   isOpen,
@@ -25,10 +25,11 @@ export const ApiKeyCreationModal = ({
 }) => {
   const [apiKey, setApiKey] = useState<ApiKey | null>(null);
   const [hasBeenCopied, setHasBeenCopied] = useState(false);
+  const { api } = useChain();
 
   const createApiKey = useCallback(() => {
-    ApiService.generateApiKey().then(setApiKey);
-  }, []);
+    api.generateApiKey().then(setApiKey);
+  }, [api]);
 
   const copyToClipboard = useCallback((text: string) => {
     navigator.clipboard.writeText(text);

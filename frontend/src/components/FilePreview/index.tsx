@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ApiService } from '../../services/api';
 import { OffchainMetadata } from '@autonomys/auto-dag-data';
 import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer';
 import '@cyntler/react-doc-viewer/dist/index.css';
 import { simpleMimeType } from '../../utils/misc';
+import { useChain } from '../../providers/ChainProvider';
 
 const MAX_FILE_SIZE = BigInt(100 * 1024 * 1024); // 100 MB
 
@@ -12,6 +12,8 @@ export const FilePreview = ({ metadata }: { metadata: OffchainMetadata }) => {
   const [error, setError] = useState<string | null>(null);
   const [isFilePreviewable, setIsFilePreviewable] = useState(false);
   const [file, setFile] = useState<Blob | null>(null);
+
+  const { api } = useChain();
 
   useEffect(() => {
     const fetchFile = async () => {
@@ -30,7 +32,8 @@ export const FilePreview = ({ metadata }: { metadata: OffchainMetadata }) => {
   useEffect(() => {
     if (isFilePreviewable) {
       setLoading(true);
-      ApiService.downloadObject(metadata.dataCid)
+      api
+        .downloadObject(metadata.dataCid)
         .then(async (file) => {
           let buffer = Buffer.alloc(0);
           for await (const chunk of file) {
@@ -52,7 +55,7 @@ export const FilePreview = ({ metadata }: { metadata: OffchainMetadata }) => {
     } else {
       setLoading(false);
     }
-  }, [metadata, isFilePreviewable]);
+  }, [metadata, isFilePreviewable, api]);
 
   const documents = useMemo(() => {
     return (

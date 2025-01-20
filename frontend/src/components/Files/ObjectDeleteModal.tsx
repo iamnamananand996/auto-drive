@@ -7,11 +7,11 @@ import {
 } from '@headlessui/react';
 import { Fragment, useCallback, useState } from 'react';
 import { UploadedObjectMetadata } from '../../models/UploadedObjectMetadata';
-import { ApiService } from '../../services/api';
 import toast from 'react-hot-toast';
 import { Button } from '../common/Button';
 import { useGetMetadataByHeadCidQuery } from '../../../gql/graphql';
 import { mapObjectInformationFromQueryResult } from '../../services/gql/utils';
+import { useChain } from '../../providers/ChainProvider';
 
 export const ObjectDeleteModal = ({
   cid,
@@ -36,12 +36,15 @@ export const ObjectDeleteModal = ({
     },
   });
 
+  const { api } = useChain();
+
   const deleteObject = useCallback(() => {
     if (!metadata) {
       return;
     }
 
-    ApiService.markObjectAsDeleted(metadata.metadata.dataCid)
+    api
+      .markObjectAsDeleted(metadata.metadata.dataCid)
       .then(() => {
         toast.success('Object deleted successfully');
         closeModal();
@@ -50,7 +53,7 @@ export const ObjectDeleteModal = ({
       .catch(() => {
         toast.error('Failed to delete object');
       });
-  }, [metadata, closeModal]);
+  }, [api, metadata, closeModal]);
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
